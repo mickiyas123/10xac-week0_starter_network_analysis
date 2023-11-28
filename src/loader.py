@@ -90,7 +90,7 @@ class SlackDataLoader:
         combined = []
         for json_file in glob.glob(f"{path_channel}*.json"):
             with open(json_file, 'r', encoding="utf8") as slack_data:
-                combined.append(slack_data)
+                combined.append(json.load(slack_data))
         # loop through all json files and extract required informations
         dflist = []
         for slack_data in combined:
@@ -131,11 +131,12 @@ class SlackDataLoader:
             df = pd.DataFrame(data=data, columns=columns)
             df = df[df['sender_name'] != 'Not provided']
             dflist.append(df)
-            dfall = pd.concat(dflist, ignore_index=True)
-            dfall['channel'] = path_channel.split('/')[-1].split('.')[0]        
-            dfall = dfall.reset_index(drop=True)
+
+        dfall = pd.concat(dflist, ignore_index=True)
+        dfall['channel'] = path_channel.split('/')[-1].split('.')[0]        
+        dfall = dfall.reset_index(drop=True)
     
-            return dfall
+        return dfall
     
     def parse_slack_reaction(self, path, channel):
         """get reactions"""

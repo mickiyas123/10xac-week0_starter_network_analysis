@@ -1,0 +1,13 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    container_name: 10-academy
+    restart: unless-stopped
+    ports:
+      - 5467:5432
+    # password and user should be stored in .env file
+    # this is just for practice purpose
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123

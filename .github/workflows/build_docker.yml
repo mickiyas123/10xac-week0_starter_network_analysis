@@ -1,0 +1,25 @@
+name: build-and-deploy
+  
+on:
+  pull_request:
+    branches:
+    - task-5
+  push:
+    branches:
+    - task-5
+    - main
+
+jobs:
+  Build-and-Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2  
+      #    
+      - name: Build docker image
+        run: docker build -t miki345/week0:latest .
+
+      - name: Login to docker hub
+        run: docker login -u {{ secret.DOCKERHUB_USERNAME}} -p {{ secret.DOCKERHUB_PASSWORD}}
+
+      - name: Push it to docker hub
+        run: docker push miki345/week0:latest

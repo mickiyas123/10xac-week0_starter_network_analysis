@@ -20,6 +20,7 @@ jobs:
 
       - name: Login to docker hub
         run: docker login -u {{ secret.DOCKERHUB_USERNAME}} -p {{ secret.DOCKERHUB_PASSWORD}}
+          #run: docker login -u {{ secret.DOCKERHUB_USERNAME}} -p {{ secret.DOCKERHUB_PASSWORD}}
 
       - name: Push it to docker hub
         run: docker push miki345/week0:latest

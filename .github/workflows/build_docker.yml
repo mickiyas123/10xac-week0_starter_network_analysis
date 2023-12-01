@@ -15,12 +15,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2  
       #    
-      - name: Build docker image
-        run: docker build -t miki345/week0:latest .
-
-      - name: Login to docker hub
-        run: docker login -u {{ secret.DOCKERHUB_USERNAME}} -p {{ secret.DOCKERHUB_PASSWORD}}
-          #run: docker login -u {{ secret.DOCKERHUB_USERNAME}} -p {{ secret.DOCKERHUB_PASSWORD}}
-
-      - name: Push it to docker hub
-        run: docker push miki345/week0:latest
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: my-docker-hub-namespace/my-docker-hub-repository
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: miki345/week0:latest
+          labels: ${{ steps.meta.outputs.labels }}
